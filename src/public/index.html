@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .transaction {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .transaction p {
+        margin: 5px 0;
+      }
+      .transaction strong {
+        font-weight: bold;
+      }
+    </style>
+
+    <title>Socket.IO Homepage</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>Socket.IO Homepage</h1>
+
+    <div id="messages">Hi</div>
+
+    <script>
+      function generateHTML(transaction) {
+        var html = '<div class="transaction">';
+        html +=
+          '<p><strong>Sender Address:</strong> <span style="color: blue;">' +
+          transaction.SenderAddress +
+          "</span></p>";
+        html +=
+          '<p><strong>Receiver Address:</strong> <span style="color: green;">' +
+          transaction.ReceiverAddress +
+          "</span></p>";
+        html +=
+          '<p><strong>Block Number:</strong> <span style="color: red;">' +
+          transaction.BlockNumber +
+          "</span></p>";
+        html +=
+          '<p><strong>Block Hash:</strong> <span style="color: purple;">' +
+          transaction.BlockHash +
+          "</span></p>";
+        html +=
+          '<p><strong>Transaction Hash:</strong> <span style="color: orange;">' +
+          transaction.TransactionHash +
+          "</span></p>";
+        html +=
+          '<p><strong>Gas Price in Wei:</strong> <span style="color: teal;">' +
+          transaction.GasPriceInWei +
+          "</span></p>";
+        html +=
+          '<p><strong>Value in Wei:</strong> <span style="color: brown;">' +
+          transaction.ValueInWei +
+          "</span></p>";
+        html += "</div>";
+        return html;
+      }
+
+      // Get the token from the query parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+
+      // Connect to the Socket.IO server with the token
+      const socket = io("ws://localhost:3000", {
+        auth: { token },
+      });
+
+      // Listen for the 'connect' event
+      socket.on("connect", () => {
+        console.log("Connected to the server");
+      });
+
+      // Emit the 'subscribe' event and join a room
+      const subscriptionParams = {
+        topic: "0-100",
+      }; // Replace with your desired room name
+      // const subscriptionParams = { topic: "all", address: "senderOrReceiver" }; // Replace with your desired room name
+      socket.emit("subscribe", subscriptionParams);
+
+      // Listen for the 'error' event
+      socket.on("error", (error) => {
+        console.error("An error occurred:", error);
+        const messagesDiv = document.getElementById("messages");
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "An error occurred: " + error.message;
+        messagesDiv.appendChild(errorMessage);
+      });
+
+      // Create a variable to store the received chunks
+      let receivedData = "";
+
+      // Listen for the 'blockchainEvent' event from the server
+      socket.on("blockchainEvent", (data) => {
+        // Append the received chunk to the existing data
+        console.log({ data });
+        receivedData += data.data;
+
+        // Check if the stream is done
+        if (data.streamDone) {
+          let obj = JSON.parse(receivedData);
+          console.log({ obj });
+
+          var outputDiv = document.getElementById("messages");
+          obj.forEach(function (transaction) {
+            // console.log({ transaction });
+            var transactionHTML = generateHTML(transaction);
+            outputDiv.innerHTML += transactionHTML;
+          });
+
+          // Reset the receivedData variable for the next stream
+          receivedData = "";
+        }
+      });
+    </script>
+  </body>
+</html>
