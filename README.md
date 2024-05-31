@@ -20,7 +20,7 @@ Below are instructions on how to set up and run the code locally, along with rel
 ### Running the Application
 
 1.  Run `docker-compose up --build` to start the defined services.
-2.  The application should be accessible on `http://localhost:3000` and the MySQL database on `localhost:3306`.
+2.  The application should be accessible on `http://localhost:3000`
 
 ## Design Choices and Assumptions
 
