@@ -74,32 +74,32 @@ Please note that the tests should be run on your local machine, as the applicati
 
 ## File Structure
 
-src  
-├─ clients  
-│ └─ 1.ts  
-├─ entity  
-│ └─ User.ts  
-├─ helpers  
-│ └─ misc.ts  
-├─ middlewares  
-│ ├─ authMiddleware.ts  
-│ ├─ socketHandler.ts  
-│ └─ tokenVerifiy.ts  
-├─ migration  
-├─ public  
-│ └─ index.html  
-├─ services  
-│ ├─ AuthController.ts  
-│ ├─ FetchRpcData.ts  
-│ ├─ RpcController.ts  
-│ └─ UserController.ts  
-├─ test  
-│ ├─ RpcController.test.ts  
-│ └─ UserController.test.ts  
-├─ data-source.ts  
-├─ index.ts  
-├─ routes.ts  
-└─ types.d.ts  
+src
+├─ clients
+│ └─ 1.ts
+├─ entity
+│ └─ User.ts
+├─ helpers
+│ └─ misc.ts
+├─ middlewares
+│ ├─ authMiddleware.ts
+│ ├─ socketHandler.ts
+│ └─ tokenVerifiy.ts
+├─ migration
+├─ public
+│ └─ index.html
+├─ services
+│ ├─ AuthController.ts
+│ ├─ FetchRpcData.ts
+│ ├─ RpcController.ts
+│ └─ UserController.ts
+├─ test
+│ ├─ RpcController.test.ts
+│ └─ UserController.test.ts
+├─ data-source.ts
+├─ index.ts
+├─ routes.ts
+└─ types.d.ts
 .dockerignore
 .env
 .gitignore
